@@ -9,7 +9,7 @@ using SquaresWebApi.Data;
 namespace SquaresWebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220216174830_init")]
+    [Migration("20220216175627_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

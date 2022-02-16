@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SquaresWebApi.Dtos.PointsCollectionDtos;
+using SquaresWebApi.Services;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SquaresWebApi.Controllers
@@ -8,10 +11,19 @@ namespace SquaresWebApi.Controllers
     [ApiController]
     public class PointsCollectionController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetAll()
+        private readonly PointsCollectionsService _pointsCollectionService;
+
+        public PointsCollectionController(PointsCollectionsService pointsCollectionService)
         {
-            return Ok();
+            _pointsCollectionService = pointsCollectionService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            List<PointsCollectionGetDto> collectionsDto = await _pointsCollectionService.GetAllAsync();
+
+            return Ok(collectionsDto);
         }
     }
 }
