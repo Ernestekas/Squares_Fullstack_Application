@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace SquaresWebApi.Controllers
 {
@@ -7,5 +8,10 @@ namespace SquaresWebApi.Controllers
     [ApiController]
     public class PointsCollectionController : ControllerBase
     {
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            return Ok();
+        }
     }
 }

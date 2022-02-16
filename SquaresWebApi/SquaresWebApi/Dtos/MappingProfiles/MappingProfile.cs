@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SquaresWebApi.Dtos.PointDtos;
+using SquaresWebApi.Dtos.PointsCollectionDtos;
+using SquaresWebApi.Models;
 
 namespace SquaresWebApi.Dtos.MappingProfiles
 {
@@ -11,7 +9,8 @@ namespace SquaresWebApi.Dtos.MappingProfiles
     {
         public MappingProfile()
         {
-            
+            CreateMap<PointsCollection, PointsCollectionGetDto>().ReverseMap();
+            CreateMap<Point, PointGetDto>().ReverseMap();
         }
     }
 }
