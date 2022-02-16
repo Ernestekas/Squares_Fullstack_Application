@@ -9,6 +9,7 @@ using SquaresWebApi.Data;
 using SquaresWebApi.Dtos.MappingProfiles;
 using SquaresWebApi.Repositories;
 using SquaresWebApi.Services;
+using SquaresWebApi.Validators;
 
 namespace SquaresWebApi
 {
@@ -36,6 +37,8 @@ namespace SquaresWebApi
 
             services.AddTransient<PointsCollectionsService>();
             services.AddTransient<PointsCollectionsRepository>();
+
+            services.AddTransient<PointsCollectionsValidator>();
 
             services.AddAutoMapper(typeof(MappingProfile));
 

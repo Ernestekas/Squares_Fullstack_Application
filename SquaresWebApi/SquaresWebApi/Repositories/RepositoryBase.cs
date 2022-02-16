@@ -51,5 +51,15 @@ namespace School_WebAPI_BE.Repositories
             _context.RemoveRange(entities);
             await _context.SaveChangesAsync();
         }
+
+        public void PrepareCreateRange(List<T> entities)
+        {
+            _context.AddRange(entities);
+        }
+
+        public void PrepareRemoveRange(List<T> entities)
+        {
+            _context.RemoveRange(entities);
+        }
     }
 }

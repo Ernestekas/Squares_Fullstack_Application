@@ -11,6 +11,9 @@ namespace SquaresWebApi.Dtos.MappingProfiles
         {
             CreateMap<PointsCollection, PointsCollectionGetDto>().ReverseMap();
             CreateMap<Point, PointGetDto>().ReverseMap();
+
+            CreateMap<PointsCollection, PointsCollectionCreateDto>().ReverseMap();
+            CreateMap<Point, PointCreateDto>().ReverseMap();
         }
     }
 }

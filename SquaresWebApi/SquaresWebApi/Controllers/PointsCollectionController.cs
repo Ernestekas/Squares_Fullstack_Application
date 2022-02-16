@@ -25,5 +25,19 @@ namespace SquaresWebApi.Controllers
 
             return Ok(collectionsDto);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(PointsCollectionCreateDto collectionDto)
+        {
+            await _pointsCollectionService.CreateAsync(collectionDto);
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            await _pointsCollectionService.DeleteAsync(id);
+            return Ok();
+        }
     }
 }

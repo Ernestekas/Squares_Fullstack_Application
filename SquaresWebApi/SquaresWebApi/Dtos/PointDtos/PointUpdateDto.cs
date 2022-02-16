@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SquaresWebApi.Dtos.PointDtos
 {
-    public class PointGetDto : PointDtoBase
+    public class PointUpdateDto : PointDtoBase
     {
         public int Id { get; set; }
     }
