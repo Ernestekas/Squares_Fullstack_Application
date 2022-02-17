@@ -39,6 +39,7 @@ namespace SquaresWebApi
             services.AddTransient<PointsCollectionsRepository>();
 
             services.AddTransient<PointsCollectionsValidator>();
+            services.AddTransient<PointsValidator>();
 
             services.AddAutoMapper(typeof(MappingProfile));
 

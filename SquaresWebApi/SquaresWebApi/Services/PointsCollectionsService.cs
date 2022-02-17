@@ -5,7 +5,6 @@ using SquaresWebApi.Repositories;
 using SquaresWebApi.Validators;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SquaresWebApi.Services
@@ -13,47 +12,61 @@ namespace SquaresWebApi.Services
     public class PointsCollectionsService
     {
         private readonly PointsCollectionsRepository _pointsCollectionsRepository;
+        private readonly PointsService _pointsService;
         private readonly PointsRepository _pointsRepository;
         private readonly IMapper _mapper;
         private readonly PointsCollectionsValidator _collectionsValidator;
+        private readonly PointsValidator _pointsValidator;
 
         public PointsCollectionsService(
             PointsCollectionsRepository pointsCollectionsRepository, 
-            PointsRepository pointsRepository, 
-            IMapper mapper, 
-            PointsCollectionsValidator validationRules)
+            PointsService pointsService, PointsRepository pointsRepository, 
+            IMapper mapper, PointsCollectionsValidator collectionsValidator, 
+            PointsValidator pointsValidator)
         {
             _pointsCollectionsRepository = pointsCollectionsRepository;
+            _pointsService = pointsService;
             _pointsRepository = pointsRepository;
             _mapper = mapper;
-            _collectionsValidator = validationRules;
+            _collectionsValidator = collectionsValidator;
+            _pointsValidator = pointsValidator;
         }
 
-        public async Task<List<PointsCollectionGetDto>> GetAllAsync()
+        public async Task<List<PointsCollectionGetAllDto>> GetAllAsync()
         {
             List<PointsCollection> collections = await _pointsCollectionsRepository.GetAllIncludedAsync();
+            return _mapper.Map<List<PointsCollectionGetAllDto>>(collections);
+        }
 
-            return _mapper.Map<List<PointsCollectionGetDto>>(collections);
+        public async Task<PointsCollectionGetDto> GetByIdAsync(int id)
+        {
+            PointsCollection collection = await _pointsCollectionsRepository.GetByIdIncludedAsync(id);
+
+            if(collection == null)
+            {
+                throw new ArgumentNullException("Selected list doesn't exist.");
+            }
+
+            return _mapper.Map<PointsCollectionGetDto>(collection);
         }
 
         public async Task CreateAsync(PointsCollectionCreateDto collectionDto)
         {
             _collectionsValidator.RunCreateValidation(collectionDto);
+            _pointsValidator.RunCreateValidation(collectionDto.Points);
 
             PointsCollection collection = _mapper.Map<PointsCollection>(collectionDto);
 
-            _pointsRepository.PrepareCreateRange(collection.Points);
-
-            await _pointsCollectionsRepository.CreateAsync(collection);
+            await CheckNameUnique(collection);
         }
 
         public async Task DeleteAsync(int id)
         {
-            PointsCollection collection = await _pointsCollectionsRepository.GetByIdIncluded(id);
+            PointsCollection collection = await _pointsCollectionsRepository.GetByIdIncludedAsync(id);
 
             if(collection == null)
             {
-                throw new ArgumentNullException(nameof(collection));
+                throw new ArgumentNullException("Specified list doesn't exist.");
             }
 
             _pointsRepository.PrepareRemoveRange(collection.Points);
@@ -61,17 +74,19 @@ namespace SquaresWebApi.Services
             await _pointsCollectionsRepository.RemoveAsync(collection);
         }
 
-        private async Task CheckIfNew(string collectionName)
+        private async Task CheckNameUnique(PointsCollection collection)
         {
-            List<PointsCollection> collections = await _pointsCollectionsRepository.GetAllAsync();
+            PointsCollection collectionFromDb = await _pointsCollectionsRepository.GetByNameAsync(collection.Name);
             
-            if(collections.Select(c => c.Name == collectionName).Any())
+            if(collectionFromDb != null)
             {
-                // Update existing collection.
+                _pointsRepository.PrepareRemoveRange(collectionFromDb.Points);
+                collectionFromDb.Points = collection.Points;
+                await _pointsCollectionsRepository.UpdateAsync(collectionFromDb);
             }
             else
             {
-                // Create new.
+                await _pointsCollectionsRepository.CreateAsync(collection);
             }
         }
     }

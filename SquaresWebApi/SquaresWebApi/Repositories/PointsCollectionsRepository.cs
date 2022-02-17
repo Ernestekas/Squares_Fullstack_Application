@@ -16,14 +16,14 @@ namespace SquaresWebApi.Repositories
             return await _context.PointsCollections.Include(p => p.Points).ToListAsync();
         }
 
-        public async Task<PointsCollection> GetByIdIncluded(int id)
+        public async Task<PointsCollection> GetByIdIncludedAsync(int id)
         {
-            return await _context.PointsCollections.Include(p => p.Points).FirstOrDefaultAsync();
+            return await _context.PointsCollections.Include(p => p.Points).FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<PointsCollection> GetByName(string name)
+        public async Task<PointsCollection> GetByNameAsync(string name)
         {
-            return await _context.PointsCollections.FirstOrDefaultAsync(x => x.Name == name);
+            return await _context.PointsCollections.Include(c => c.Points).FirstOrDefaultAsync(x => x.Name == name);
         }
     }
 }
