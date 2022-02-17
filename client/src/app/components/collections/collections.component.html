@@ -1,0 +1,26 @@
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th colspan="4" class="bg-dark text-white text-center"><i>Collections</i></th>
+        </tr>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th class="text-center"># of pts.</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr (click)="test()">
+            <td>></td>
+            <td><b><i>New Collection</i></b></td>
+            <td></td>
+        </tr>
+        <tr *ngFor="let collection of collectionsInput; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{collection.name}}</td>
+            <td class="text-center">{{collection.pointsCount}}</td>
+            <td><i>Actions</i></td>
+        </tr>
+    </tbody>
+</table>
