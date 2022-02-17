@@ -1,6 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
-using SquaresWebApi.Dtos.PointDtos;
 using SquaresWebApi.Dtos.PointsCollectionDtos;
 
 namespace SquaresWebApi.Validators

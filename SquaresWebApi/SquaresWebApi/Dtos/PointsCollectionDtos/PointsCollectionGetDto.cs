@@ -1,5 +1,4 @@
 ﻿using SquaresWebApi.Dtos.PointDtos;
-using SquaresWebApi.Models;
 using System.Collections.Generic;
 
 namespace SquaresWebApi.Dtos.PointsCollectionDtos
