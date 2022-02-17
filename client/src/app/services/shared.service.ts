@@ -8,8 +8,10 @@ import { CollectionsService } from './collections.service';
 })
 export class SharedService {
   public collections$ = new BehaviorSubject<Collection[]>([]);
+  public selectedCollection$ = new BehaviorSubject<Collection>({});
 
   private collections: Collection[] = [];
+  private selectedCollection: Collection = {};
 
   constructor(private collectionsService: CollectionsService) { }
 
@@ -24,4 +26,7 @@ export class SharedService {
     });
   }
 
+  public loadSelectedCollection(collection: Collection) {
+    this.selectedCollection$.next(collection);
+  }
 }

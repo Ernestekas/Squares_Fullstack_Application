@@ -1,26 +1,22 @@
-<table class="table table-hover">
+<table class="table table-hover selectedTable">
     <thead>
         <tr>
-            <th colspan="4" class="bg-dark text-white text-center"><i>Collections</i></th>
+            <th colspan="3" class="bg-dark text-white text-center title align-middle"><i>Collections</i></th>
         </tr>
         <tr>
             <th>#</th>
             <th>Name</th>
             <th class="text-center"># of pts.</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        <tr (click)="test()">
-            <td>></td>
-            <td><b><i>New Collection</i></b></td>
-            <td></td>
+        <tr id="selectedList">
+            <td colspan="4" class="text-center"><b><i>--New Collection--</i></b></td>
         </tr>
         <tr *ngFor="let collection of collectionsInput; let i = index">
             <td>{{i + 1}}</td>
             <td>{{collection.name}}</td>
             <td class="text-center">{{collection.pointsCount}}</td>
-            <td><i>Actions</i></td>
         </tr>
     </tbody>
 </table>

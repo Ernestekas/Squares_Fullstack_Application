@@ -10,6 +10,7 @@ import { SharedService } from 'src/app/services/shared.service';
 export class CollectionsComponent implements OnInit {
 
   public collectionsInput: Collection[] = [];
+  public selectedCollectionOutput: Collection = {name: "", points: []};
 
   constructor(private sharedService: SharedService) { }
 
@@ -23,10 +24,7 @@ export class CollectionsComponent implements OnInit {
       error: (response) => console.log(response.error),
       complete: () => console.log("Ok shared.")
     });
-  }
 
-  test() {
-    console.log("Labas");
+    this.sharedService.loadSelectedCollection(this.selectedCollectionOutput);
   }
-
 }
