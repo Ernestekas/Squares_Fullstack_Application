@@ -29,4 +29,18 @@ export class SharedService {
   public loadSelectedCollection(collection: Collection) {
     this.selectedCollection$.next(collection);
   }
+
+  public createCollection(collection: Collection) {
+    this.collectionsService.post(collection).subscribe({
+      next: () => {
+        this.loadAll();
+      },
+      error: (response) => {
+        console.log(response.error);
+      },
+      complete: () => {
+        console.log("Ok");
+      }
+    });
+  }
 }

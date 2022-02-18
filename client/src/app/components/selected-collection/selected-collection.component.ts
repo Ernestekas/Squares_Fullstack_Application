@@ -68,7 +68,11 @@ export class SelectedCollectionComponent implements OnInit {
   saveCollection() {
     this.selectedCollectionInput.points?.push(...this.manualyAdded);
     this.manualyAdded = [];
+
+    this.sharedService.createCollection(this.selectedCollectionInput);
   }
+
+
 
   private validateNewPoint(point: Point): boolean {
     if(point.x == undefined || point.y == undefined){
