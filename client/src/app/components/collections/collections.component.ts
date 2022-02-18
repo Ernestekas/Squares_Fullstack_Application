@@ -27,7 +27,6 @@ export class CollectionsComponent implements OnInit {
     this.sharedService.selectedCollection$.subscribe({
       next: (collectionData) => {
         this.selectedCollectionOutput = collectionData;
-        console.log(collectionData, "subadubas");
       },
       error: (response) => {
         console.log(response.error);

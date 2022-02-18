@@ -56,4 +56,19 @@ export class SharedService {
     this.selectedCollection = collection;
     this.selectedCollection$.next(this.selectedCollection);
   }
+
+  public removeSelectedCollection() {
+    this.collectionsService.remove(this.selectedCollection.id!).subscribe({
+      next: () => {
+        this.loadAll();
+      },
+      error: (response) => {
+        console.log(response.error);
+      },
+      complete: () => {
+        console.log("Delete OK.");
+        this.sendSelectedCollection({name: "", points: []});
+      }
+    });
+  }
 }

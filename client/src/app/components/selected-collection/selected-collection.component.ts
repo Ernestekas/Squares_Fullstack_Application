@@ -9,10 +9,12 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./selected-collection.component.scss']
 })
 export class SelectedCollectionComponent implements OnInit {
-
+  
   public selectedCollectionInput: Collection = {};
   public manualyAdded: Point[] = [];
   public newPoint: Point = {};
+
+  public fileToUpload: File | null = null;
 
   constructor(private sharedService: SharedService) { }
 
@@ -72,7 +74,24 @@ export class SelectedCollectionComponent implements OnInit {
     this.sharedService.createCollection(this.selectedCollectionInput);
   }
 
+  removeCollection() {
+    this.sharedService.removeSelectedCollection();
+  }
 
+  onChangeEvent(event: any){
+    this.readFile(event.target.files[0]);
+  }
+
+  readFile(input: File){
+    input.type()
+    let fileReader = new FileReader();
+    fileReader.readAsText(input);
+    fileReader.onload = () => {
+      console.log(fileReader.result);
+    }
+  }
+
+  
 
   private validateNewPoint(point: Point): boolean {
     if(point.x == undefined || point.y == undefined){

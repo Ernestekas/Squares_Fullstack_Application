@@ -6,13 +6,17 @@
                     placeholder="Collection name">
             </th>
             <th colspan="1" style="text-align: right;">
-                <button class="btn btn-outline-light mx-1" (click)="saveCollection()">Save</button>
-                <button class="btn btn-outline-danger">Delete</button>
+                <button class="btn btn-outline-light  mx-1" (click)="saveCollection()">Save</button>
+                <button class="btn btn-outline-danger" (click)="removeCollection()">Delete</button>
             </th>
         </tr>
         <tr id="importCollection" class="bg-light">
-            <td colspan="4" class="text-center">
-                <input type="file" name="file" id="file" class="form-control">
+            <td colspan="3" class="text-center">
+                <input type="file" name="file" id="file" class="form-control" (change)="onChangeEvent($event)">
+            </td>
+            <td colspan="1" style="text-align: right;">
+                <button class="btn btn-outline-dark mx-1" >Import</button>
+                <button class="btn btn-outline-dark">Export</button>
             </td>
         </tr>
         <tr class="text-center">
@@ -34,7 +38,7 @@
             <td style="text-align: right;">
                 <button class="btn btn-outline-dark" (click)="addPoint()">Add</button>
                 <button class="btn btn-outline-dark mx-1" (click)="addRandomPoint()">Random</button>
-                <button class="btn btn-outline-dark">Clear points</button>
+                <button class="btn btn-outline-dark">Clear added</button>
             </td>
         </tr>
         <tr *ngFor="let point of selectedCollectionInput.points; let i = index" class="align-middle text-center">
