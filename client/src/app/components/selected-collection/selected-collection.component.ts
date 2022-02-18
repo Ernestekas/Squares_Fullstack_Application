@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import Collection from 'src/app/Models/Collection.model';
+import ImportedCollection from 'src/app/Models/imported-collection.model';
 import Point from 'src/app/Models/Point.model';
 import { SharedService } from 'src/app/services/shared.service';
+import { TextReaderService } from 'src/app/services/text-reader.service';
 
 @Component({
   selector: 'app-selected-collection',
@@ -9,14 +11,15 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./selected-collection.component.scss']
 })
 export class SelectedCollectionComponent implements OnInit {
-  
+
   public selectedCollectionInput: Collection = {};
   public manualyAdded: Point[] = [];
   public newPoint: Point = {};
 
   public fileToUpload: File | null = null;
+  public importedCollection: ImportedCollection = {importedPoints: [], failedEntries: []};
 
-  constructor(private sharedService: SharedService) { }
+  constructor(private sharedService: SharedService, private textReaderService: TextReaderService) { }
 
   ngOnInit(): void {
     this.sharedService.selectedCollection$.subscribe({
@@ -33,15 +36,15 @@ export class SelectedCollectionComponent implements OnInit {
   }
 
   addPoint() {
-    let tempPoint : Point = {
+    let tempPoint: Point = {
       x: this.newPoint.x,
       y: this.newPoint.y
     }
 
-    if(this.validateNewPoint(tempPoint)){
+    if (this.validateNewPoint(tempPoint)) {
       this.manualyAdded.push(tempPoint);
     }
-    
+
     this.newPoint = {};
   }
 
@@ -51,20 +54,24 @@ export class SelectedCollectionComponent implements OnInit {
       y: Math.floor(Math.random() * 10000) - 5000
     };
 
-    if(this.validateNewPoint(randomPoint)){
+    if (this.validateNewPoint(randomPoint)) {
       this.manualyAdded.push(randomPoint);
     }
 
     this.newPoint = {};
   }
 
+  clearManualyAdded(){
+    this.manualyAdded = [];
+  }
+
   removePoint(point: Point) {
     this.selectedCollectionInput.points = this.selectedCollectionInput.points!.filter(p => p.x !== point.x && p.y !== point.y);
   }
 
-  removeManualyAddedPoint(point: Point)
-  {
+  removeManualyAddedPoint(point: Point) {
     this.manualyAdded = this.manualyAdded.filter(p => p.x !== point.x && p.y !== point.y);
+    this.importedCollection = {failedEntries: [], importedPoints: []};
   }
 
   saveCollection() {
@@ -78,40 +85,35 @@ export class SelectedCollectionComponent implements OnInit {
     this.sharedService.removeSelectedCollection();
   }
 
-  onChangeEvent(event: any){
-    this.readFile(event.target.files[0]);
-  }
-
-  readFile(input: File){
-    
+  onChangeEvent(event: any) {
     let fileReader = new FileReader();
-    fileReader.readAsText(input);
+    fileReader.readAsText(event.target.files[0]);
     fileReader.onload = () => {
-      console.log(fileReader.result);
+      let lines = (fileReader.result as string).split(/\r?\n/);
+      this.importedCollection = this.textReaderService.getImportedCoordinates(lines);
+      this.manualyAdded.push(...this.importedCollection.importedPoints);
     }
   }
-
-  
 
   private validateNewPoint(point: Point): boolean {
-    if(point.x == undefined || point.y == undefined){
+    if (point.x == undefined || point.y == undefined) {
       return false;
     }
 
-    if(point.x < -5000 || point.x > 5000 || point.y < -5000 || point.y > 5000){
+    if (point.x < -5000 || point.x > 5000 || point.y < -5000 || point.y > 5000) {
       return false;
     }
 
-    if(this.selectedCollectionInput.points != null){
-      if(this.selectedCollectionInput.points.length + this.manualyAdded.length > 10000){
+    if (this.selectedCollectionInput.points != null) {
+      if (this.selectedCollectionInput.points.length + this.manualyAdded.length > 10000) {
         return false
       }
     }
-    else if(this.manualyAdded.length > 10000){
+    else if (this.manualyAdded.length > 10000) {
       return false
     }
 
-    if(!this.checkIfPointUnique(point)){
+    if (!this.checkIfPointUnique(point)) {
       return false;
     }
 
@@ -119,20 +121,20 @@ export class SelectedCollectionComponent implements OnInit {
   }
 
   private checkIfPointUnique(pointToCheck: Point): boolean {
-    if(this.selectedCollectionInput.points != null){
-      for(let i = 0; i < this.selectedCollectionInput.points!.length; i++){
+    if (this.selectedCollectionInput.points != null) {
+      for (let i = 0; i < this.selectedCollectionInput.points!.length; i++) {
         let point: Point = this.selectedCollectionInput.points![i];
-        
-        if(point.x == pointToCheck.x && point.y == pointToCheck.y){
+
+        if (point.x == pointToCheck.x && point.y == pointToCheck.y) {
           return false;
         }
       }
     }
-    
-    for(let i = 0; i < this.manualyAdded.length; i++){
+
+    for (let i = 0; i < this.manualyAdded.length; i++) {
       let point: Point = this.manualyAdded![i];
-      
-      if(point.x == pointToCheck.x && point.y == pointToCheck.y){
+
+      if (point.x == pointToCheck.x && point.y == pointToCheck.y) {
         return false;
       }
     }
