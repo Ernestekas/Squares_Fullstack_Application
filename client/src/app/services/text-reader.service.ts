@@ -9,7 +9,7 @@ export class TextReaderService {
   constructor() { }
 
   public getImportedCoordinates(lines: string[]): ImportedCollection {
-    let importedCollection: ImportedCollection = { importedPoints: [], failedEntries: [] };
+    let importedCollection: ImportedCollection = { importedPoints: [], failedEntries: [], failedValidation: [] };
     for (let i = 0; i < lines.length; i++) {
       let coordinates = lines[i].split(" ");
       let resultModel = this.validateCoordinates(coordinates, i);
@@ -30,19 +30,25 @@ export class TextReaderService {
 
   private validateCoordinates(coordinates: any[], lineNumber: number): ImportedCollection {
 
-    let imported: ImportedCollection = { importedPoints: [], failedEntries: [] };
+    let imported: ImportedCollection = { importedPoints: [], failedEntries: [], failedValidation: []};
+    let validated: boolean = true;
 
     if (!this.checkCoordinatesAreNumbers(coordinates)) {
-      imported.failedEntries.push("Line: " + lineNumber + " | " + coordinates.join(', ') + " - Wrong coordinates format. Right format: 123 321.");
+      validated = false;
     }
 
     if (!this.checkIfOnlyXYCoordinates(coordinates)) {
-      imported.failedEntries.push("Line: " + lineNumber + " | " + coordinates.join(', ') + " - Too much coordinates specified. Right format: 123 321.");
+      validated = false;
     }
 
     if (!this.coordinatesAreInSpecifiedInterval(coordinates, -5000, 5000)) {
-      imported.failedEntries.push("Line: " + lineNumber + " | " + coordinates.join(', ') + " - All coordinates must be between -5000 and 5000.");
+      validated = false;
     }
+
+    if(!validated){
+      imported.failedEntries.push("Line: " + lineNumber + " | " + coordinates.join(', ') + " - Wrong coordinates format. Right format: integer integer.");
+    }
+
     return imported;
   }
 

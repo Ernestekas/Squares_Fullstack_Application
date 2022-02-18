@@ -1,0 +1,28 @@
+  <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white text-center">
+          <h5 class="modal-title" id="reportModalLabel"><b>File Import Results</b></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <dl>
+              <dt>Imported Points Count:</dt>
+              <dd>{{importedCollection.importedPoints.length}}</dd>
+              <dt>Other reports:</dt>
+              <dd *ngFor="let fault of importedCollection.failedEntries; let i = index">
+                  {{i + 1}}. {{fault}}
+              </dd>
+              <dt>Failed validation:</dt>
+              <dd *ngFor="let fValidation of importedCollection.failedValidation; let i = index">
+                  {{i + 1}}. {{fValidation}}
+              </dd>
+          </dl>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

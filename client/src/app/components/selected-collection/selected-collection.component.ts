@@ -17,7 +17,8 @@ export class SelectedCollectionComponent implements OnInit {
   public newPoint: Point = {};
 
   public fileToUpload: File | null = null;
-  public importedCollection: ImportedCollection = {importedPoints: [], failedEntries: []};
+  public importedCollection: ImportedCollection = {importedPoints: [], failedEntries: [], failedValidation: []};
+  private importValidation: ImportedCollection = {importedPoints: [], failedEntries: [], failedValidation: []};
 
   constructor(private sharedService: SharedService, private textReaderService: TextReaderService) { }
 
@@ -74,7 +75,7 @@ export class SelectedCollectionComponent implements OnInit {
 
   removeManualyAddedPoint(point: Point) {
     this.manualyAdded = this.manualyAdded.filter(p => p.x !== point.x && p.y !== point.y);
-    this.importedCollection = {failedEntries: [], importedPoints: []};
+    this.importedCollection = {failedEntries: [], importedPoints: [], failedValidation: []};
   }
 
   saveCollection() {
@@ -90,41 +91,59 @@ export class SelectedCollectionComponent implements OnInit {
 
   onChangeEvent(event: any) {
     let fileReader = new FileReader();
+    
     fileReader.readAsText(event.target.files[0]);
     fileReader.onload = () => {
       let lines = (fileReader.result as string).split(/\r?\n/);
-      this.importedCollection = this.textReaderService.getImportedCoordinates(lines);
-      this.importedCollection.importedPoints.forEach(p => {
+      let unvalidatedCollection = this.textReaderService.getImportedCoordinates(lines);
+      
+      unvalidatedCollection.importedPoints.forEach(p => {
 
         if(this.validateNewPoint(p)){
           this.manualyAdded.push(p);
         }else{
-          
-          return;
+          unvalidatedCollection.failedValidation.push(...this.importValidation.failedValidation);
+          unvalidatedCollection.importedPoints = unvalidatedCollection.importedPoints.filter(point => point.x != p.x && point.y != p.y);
+
+          this.importValidation.failedValidation = [];
         }
       });
+
+      this.importedCollection = unvalidatedCollection;
     }
   }
 
   private validateNewPoint(point: Point): boolean {
+
+    let validated: boolean = true;
+
     if (point.x == undefined || point.y == undefined) {
+      this.importValidation.failedValidation.push("X or Y undefined. Coordinates: X: " + point.x + " Y: " + point.y);
       return false;
     }
 
     if (point.x < -5000 || point.x > 5000 || point.y < -5000 || point.y > 5000) {
-      return false;
+      this.importValidation.failedValidation.push("X or Y out of bounds valid value interval (-5000, 5000). Coordinates: X: " + point.x + " Y: " + point.y);
+      validated = false;
     }
 
     if (this.selectedCollectionInput.points != null) {
       if (this.selectedCollectionInput.points.length + this.manualyAdded.length > 10000) {
-        return false
+        this.importValidation.failedValidation.push("List limit reached. Maximum 10000 points.");
+        validated = false;
       }
     }
     else if (this.manualyAdded.length > 10000) {
-      return false
+      this.importValidation.failedValidation.push("List limit reached. Maximum 10000 points.");
+      validated = false;
     }
 
     if (!this.checkIfPointUnique(point)) {
+      this.importValidation.failedValidation.push("This point already exists. Coordinates: X: " + point.x + " Y: " + point.y);
+      validated = false;
+    }
+
+    if(!validated){
       return false;
     }
 
@@ -135,7 +154,6 @@ export class SelectedCollectionComponent implements OnInit {
     if (this.selectedCollectionInput.points != null) {
       for (let i = 0; i < this.selectedCollectionInput.points!.length; i++) {
         let point: Point = this.selectedCollectionInput.points![i];
-
         if (point.x == pointToCheck.x && point.y == pointToCheck.y) {
           return false;
         }

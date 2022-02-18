@@ -7,12 +7,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CollectionsComponent } from './components/collections/collections.component';
 import { SelectedCollectionComponent } from './components/selected-collection/selected-collection.component';
+import { LoadedFileResultComponent } from './components/loaded-file-result/loaded-file-result.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CollectionsComponent,
-    SelectedCollectionComponent
+    SelectedCollectionComponent,
+    LoadedFileResultComponent
   ],
   imports: [
     BrowserModule,
