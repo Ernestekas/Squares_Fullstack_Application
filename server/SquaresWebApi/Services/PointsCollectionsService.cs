@@ -34,8 +34,15 @@ namespace SquaresWebApi.Services
 
         public async Task<List<PointsCollectionGetAllDto>> GetAllAsync()
         {
-            List<PointsCollection> collections = await _pointsCollectionsRepository.GetAllIncludedAsync();
-            return _mapper.Map<List<PointsCollectionGetAllDto>>(collections);
+            List<PointsCollection> collections = await _pointsCollectionsRepository.GetAllAsync();
+
+            List<PointsCollectionGetAllDto> collectionsDto = _mapper.Map<List<PointsCollectionGetAllDto>>(collections);
+            foreach(var c in collectionsDto)
+            {
+                c.PointsCount = await _pointsRepository.GetPointsCountByCollectionIdAsync(c.Id);
+            }
+
+            return collectionsDto;
         }
 
         public async Task<PointsCollectionGetDto> GetByIdAsync(int id)

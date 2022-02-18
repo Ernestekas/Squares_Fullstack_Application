@@ -1,8 +1,10 @@
-﻿using School_WebAPI_BE.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using School_WebAPI_BE.Repositories;
 using SquaresWebApi.Data;
 using SquaresWebApi.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SquaresWebApi.Repositories
 {
@@ -10,9 +12,9 @@ namespace SquaresWebApi.Repositories
     {
         public PointsRepository(DataContext context) : base(context) { }
 
-        public List<Point> GetAllByCollectionId(int collectionId)
+        public async Task<int> GetPointsCountByCollectionIdAsync(int collectionId)
         {
-            return _context.Points.Where(p => p.PointsCollectionId == collectionId).ToList();
+            return await _context.Points.CountAsync(p => p.PointsCollectionId == collectionId);
         }
     }
 }

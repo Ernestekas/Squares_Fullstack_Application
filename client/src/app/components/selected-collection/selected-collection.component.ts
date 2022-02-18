@@ -83,7 +83,7 @@ export class SelectedCollectionComponent implements OnInit {
   }
 
   readFile(input: File){
-    input.type()
+    
     let fileReader = new FileReader();
     fileReader.readAsText(input);
     fileReader.onload = () => {

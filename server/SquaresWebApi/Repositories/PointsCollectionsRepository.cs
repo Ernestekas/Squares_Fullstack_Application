@@ -11,11 +11,6 @@ namespace SquaresWebApi.Repositories
     {
         public PointsCollectionsRepository(DataContext context) : base(context) { }
 
-        public async Task<List<PointsCollection>> GetAllIncludedAsync()
-        {
-            return await _context.PointsCollections.Include(p => p.Points).ToListAsync();
-        }
-
         public async Task<PointsCollection> GetByIdIncludedAsync(int id)
         {
             return await _context.PointsCollections.Include(p => p.Points).FirstOrDefaultAsync(c => c.Id == id);
