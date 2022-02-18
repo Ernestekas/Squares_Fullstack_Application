@@ -10,10 +10,10 @@
         </tr>
     </thead>
     <tbody>
-        <tr id="selectedList">
+        <tr id="newCollection">
             <td colspan="4" class="text-center"><b><i>--New Collection--</i></b></td>
         </tr>
-        <tr *ngFor="let collection of collectionsInput; let i = index">
+        <tr id="collection{{collection.name}}" (click)="clickCollection(collection)" *ngFor="let collection of collectionsInput; let i = index">
             <td>{{i + 1}}</td>
             <td>{{collection.name}}</td>
             <td class="text-center">{{collection.pointsCount}}</td>

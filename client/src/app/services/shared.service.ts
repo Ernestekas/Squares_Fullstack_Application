@@ -11,9 +11,11 @@ export class SharedService {
   public selectedCollection$ = new BehaviorSubject<Collection>({});
 
   private collections: Collection[] = [];
-  private selectedCollection: Collection = {};
+  private selectedCollection: Collection = {name: "", points: []};
 
-  constructor(private collectionsService: CollectionsService) { }
+  constructor(private collectionsService: CollectionsService) {
+    this.selectedCollection$.next(this.selectedCollection);
+  }
 
   public loadAll() {
     this.collectionsService.getAll().subscribe({
@@ -27,6 +29,12 @@ export class SharedService {
   }
 
   public loadSelectedCollection(collection: Collection) {
+    this.collectionsService.getById(collection.id!).subscribe({
+      next: (coll) => {
+        this.selectedCollection = coll;
+        this.selectedCollection$.next(this.selectedCollection);
+      }
+    })
     this.selectedCollection$.next(collection);
   }
 
@@ -42,5 +50,10 @@ export class SharedService {
         console.log("Ok");
       }
     });
+  }
+
+  public sendSelectedCollection(collection: Collection){
+    this.selectedCollection = collection;
+    this.selectedCollection$.next(this.selectedCollection);
   }
 }

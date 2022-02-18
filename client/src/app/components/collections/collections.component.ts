@@ -10,13 +10,12 @@ import { SharedService } from 'src/app/services/shared.service';
 export class CollectionsComponent implements OnInit {
 
   public collectionsInput: Collection[] = [];
-  public selectedCollectionOutput: Collection = {name: "", points: []};
+  public selectedCollectionOutput: Collection = {};
 
   constructor(private sharedService: SharedService) { }
 
   ngOnInit(): void {
     this.sharedService.loadAll();
-
     this.sharedService.collections$.subscribe({
       next: (collectionsData) => {
         this.collectionsInput = collectionsData;
@@ -25,6 +24,21 @@ export class CollectionsComponent implements OnInit {
       complete: () => console.log("Ok shared.")
     });
 
-    this.sharedService.loadSelectedCollection(this.selectedCollectionOutput);
+    this.sharedService.selectedCollection$.subscribe({
+      next: (collectionData) => {
+        this.selectedCollectionOutput = collectionData;
+        console.log(collectionData, "subadubas");
+      },
+      error: (response) => {
+        console.log(response.error);
+      },
+      complete: () => {
+        console.log("Ok");
+      }
+    });
+  }
+
+  clickCollection(collection: Collection){
+    this.sharedService.loadSelectedCollection(collection);
   }
 }
