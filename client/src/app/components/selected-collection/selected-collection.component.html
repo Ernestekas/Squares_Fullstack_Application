@@ -13,7 +13,9 @@
         </tr>
         <tr id="importCollection" class="bg-light">
             <td colspan="4" class="text-center">
-                <input type="file" name="file" id="file" class="form-control" (change)="onChangeEvent($event)">
+                <form id="fileForm">
+                    <input type="file" name="file" id="file" class="form-control" value="" (change)="onChangeEvent($event)">
+                </form>
             </td>
         </tr>
         <tr class="text-center">
@@ -42,7 +44,7 @@
             <td>{{i + 1}}</td>
             <td>{{point.x}}</td>
             <td>{{point.y}}</td>
-            <td>
+            <td >
                 <button class="btn btn-outline-dark" (click)="removePoint(point)">Remove</button>
             </td>
         </tr>
@@ -53,7 +55,7 @@
             <td>{{i + 1}}</td>
             <td>{{point.x}}</td>
             <td>{{point.y}}</td>
-            <td>
+            <td style="text-align: right;">
                 <button class="btn btn-outline-dark" (click)="removeManualyAddedPoint(point)">Remove</button>
             </td>
         </tr>

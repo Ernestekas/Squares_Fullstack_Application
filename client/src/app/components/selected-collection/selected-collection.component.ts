@@ -25,6 +25,9 @@ export class SelectedCollectionComponent implements OnInit {
     this.sharedService.selectedCollection$.subscribe({
       next: (collectionData) => {
         this.selectedCollectionInput = collectionData;
+        this.manualyAdded = [];
+        let fileForm: HTMLFormElement = <HTMLFormElement>document.getElementById("fileForm");
+        fileForm?.reset();
       },
       error: (response) => {
         console.log(response.error);
@@ -91,7 +94,15 @@ export class SelectedCollectionComponent implements OnInit {
     fileReader.onload = () => {
       let lines = (fileReader.result as string).split(/\r?\n/);
       this.importedCollection = this.textReaderService.getImportedCoordinates(lines);
-      this.manualyAdded.push(...this.importedCollection.importedPoints);
+      this.importedCollection.importedPoints.forEach(p => {
+
+        if(this.validateNewPoint(p)){
+          this.manualyAdded.push(p);
+        }else{
+          
+          return;
+        }
+      });
     }
   }
 
