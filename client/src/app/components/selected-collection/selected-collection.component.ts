@@ -103,7 +103,8 @@ export class SelectedCollectionComponent implements OnInit {
           this.manualyAdded.push(p);
         }else{
           unvalidatedCollection.failedValidation.push(...this.importValidation.failedValidation);
-          unvalidatedCollection.importedPoints = unvalidatedCollection.importedPoints.filter(point => point.x != p.x && point.y != p.y);
+          unvalidatedCollection.importedPoints = unvalidatedCollection.importedPoints.filter(point => 
+            point.x != p.x && point.y != p.y);
 
           this.importValidation.failedValidation = [];
         }

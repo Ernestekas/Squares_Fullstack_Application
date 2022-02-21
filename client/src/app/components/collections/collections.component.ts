@@ -40,4 +40,8 @@ export class CollectionsComponent implements OnInit {
   clickCollection(collection: Collection){
     this.sharedService.loadSelectedCollection(collection);
   }
+
+  clickEmptyCollection(){
+    this.sharedService.loadSelectedCollection({});
+  }
 }
