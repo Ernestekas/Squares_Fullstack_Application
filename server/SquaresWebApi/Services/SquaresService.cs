@@ -28,6 +28,10 @@ namespace SquaresWebApi.Services
             }
         }
 
+        private void GetVectorsAngle(Vector AB, Vector AC)
+        {
+
+        }
         
         private List<Vector> FormVectors(PointSquaresDto a, PointSquaresDto b, PointSquaresDto c)
         {
