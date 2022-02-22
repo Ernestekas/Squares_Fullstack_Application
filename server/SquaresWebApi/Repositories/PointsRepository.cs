@@ -2,8 +2,6 @@
 using School_WebAPI_BE.Repositories;
 using SquaresWebApi.Data;
 using SquaresWebApi.Models;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SquaresWebApi.Repositories

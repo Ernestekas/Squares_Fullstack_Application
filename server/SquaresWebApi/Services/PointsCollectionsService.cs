@@ -12,20 +12,18 @@ namespace SquaresWebApi.Services
     public class PointsCollectionsService
     {
         private readonly PointsCollectionsRepository _pointsCollectionsRepository;
-        private readonly PointsService _pointsService;
         private readonly PointsRepository _pointsRepository;
         private readonly IMapper _mapper;
         private readonly PointsCollectionsValidator _collectionsValidator;
         private readonly PointsValidator _pointsValidator;
 
         public PointsCollectionsService(
-            PointsCollectionsRepository pointsCollectionsRepository, 
-            PointsService pointsService, PointsRepository pointsRepository, 
+            PointsCollectionsRepository pointsCollectionsRepository,
+            PointsRepository pointsRepository, 
             IMapper mapper, PointsCollectionsValidator collectionsValidator, 
             PointsValidator pointsValidator)
         {
             _pointsCollectionsRepository = pointsCollectionsRepository;
-            _pointsService = pointsService;
             _pointsRepository = pointsRepository;
             _mapper = mapper;
             _collectionsValidator = collectionsValidator;
@@ -63,8 +61,15 @@ namespace SquaresWebApi.Services
             _pointsValidator.RunCreateValidation(collectionDto.Points);
 
             PointsCollection collection = _mapper.Map<PointsCollection>(collectionDto);
-            // The name is misleading
-            await CheckNameUnique(collection);
+
+            if (await CheckNameUniqueAsync(collection))
+            {
+                await _pointsCollectionsRepository.CreateAsync(collection);
+            }
+            else
+            {
+                await UpdateAsync(collection);
+            }
         }
 
         public async Task DeleteAsync(int id)
@@ -81,20 +86,25 @@ namespace SquaresWebApi.Services
             await _pointsCollectionsRepository.RemoveAsync(collection);
         }
 
-        private async Task CheckNameUnique(PointsCollection collection)
+        private async Task<bool> CheckNameUniqueAsync(PointsCollection collection)
         {
             PointsCollection collectionFromDb = await _pointsCollectionsRepository.GetByNameAsync(collection.Name);
-            
+
             if(collectionFromDb != null)
             {
-                _pointsRepository.PrepareRemoveRange(collectionFromDb.Points);
-                collectionFromDb.Points = collection.Points;
-                await _pointsCollectionsRepository.UpdateAsync(collectionFromDb);
+                return false;
             }
-            else
-            {
-                await _pointsCollectionsRepository.CreateAsync(collection);
-            }
+            
+            return true;
+        }
+
+        private async Task UpdateAsync(PointsCollection collection)
+        {
+            PointsCollection collectionFromDb = await _pointsCollectionsRepository.GetByNameAsync(collection.Name);
+
+            _pointsRepository.PrepareRemoveRange(collectionFromDb.Points);
+            collectionFromDb.Points = collection.Points;
+            await _pointsCollectionsRepository.UpdateAsync(collectionFromDb);
         }
     }
 }
