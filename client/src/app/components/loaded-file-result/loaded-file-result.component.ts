@@ -31,6 +31,4 @@ export class LoadedFileResultComponent implements OnInit {
       this.initChange = false;
     }
   }
-
-  
 }

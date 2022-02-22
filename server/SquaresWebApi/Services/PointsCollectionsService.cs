@@ -63,7 +63,7 @@ namespace SquaresWebApi.Services
             _pointsValidator.RunCreateValidation(collectionDto.Points);
 
             PointsCollection collection = _mapper.Map<PointsCollection>(collectionDto);
-
+            // The name is misleading
             await CheckNameUnique(collection);
         }
 

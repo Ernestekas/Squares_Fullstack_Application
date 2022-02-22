@@ -21,7 +21,6 @@ export class TextReaderService {
           x: parseInt(coordinates[0]),
           y: parseInt(coordinates[1])
         });
-
       }
     }
 
