@@ -46,17 +46,17 @@
             <td>{{i + 1}}</td>
             <td>{{point.x}}</td>
             <td>{{point.y}}</td>
-            <td >
+            <td style="text-align: right;">
                 <button class="btn btn-outline-dark" (click)="removePoint(point)">Remove</button>
             </td>
         </tr>
         <tr id="manualTitle" class="text-center bg-dark text-white align-middle">
             <th colspan="4"><i>Manualy added points</i></th>
         </tr>
-        <tr class="align-middle text-center" *ngFor="let point of manualyAdded; let i = index">
-            <td>{{i + 1}}</td>
-            <td>{{point.x}}</td>
-            <td>{{point.y}}</td>
+        <tr class="align-middle " *ngFor="let point of manualyAdded; let i = index">
+            <td class="text-center">{{i + 1}}</td>
+            <td class="text-center">{{point.x}}</td>
+            <td class="text-center">{{point.y}}</td>
             <td style="text-align: right;">
                 <button class="btn btn-outline-dark" (click)="removeManualyAddedPoint(point)">Remove</button>
             </td>
