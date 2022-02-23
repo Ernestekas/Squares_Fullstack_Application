@@ -10,5 +10,7 @@ namespace SquaresWebApi.Dtos.SquareDtos
     {
         public PointSquaresDto Start { get; set; }
         public PointSquaresDto End { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }
