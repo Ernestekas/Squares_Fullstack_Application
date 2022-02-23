@@ -31,7 +31,10 @@ namespace SquaresWebApi.Services
                                     SquareDto foundSquare = SearchForFourthCorner(collectionDto, vectors);
                                     if(foundSquare != null)
                                     {
-                                        squares.Add(foundSquare);
+                                        if(SquareIsUnique(foundSquare, squares))
+                                        {
+                                            squares.Add(foundSquare);
+                                        }
                                     }
                                 }
                             }
@@ -48,7 +51,7 @@ namespace SquaresWebApi.Services
             double magnitudeAB = Math.Sqrt(Math.Pow(AB.X, 2) + Math.Pow(AB.Y, 2));
             double magnitudeAC = Math.Sqrt(Math.Pow(AC.X, 2) + Math.Pow(AC.Y, 2));
 
-            return Math.Round(Math.Acos((ABxAC)/(magnitudeAB * magnitudeAC)), 4);
+            return Math.Acos((ABxAC)/(magnitudeAB * magnitudeAC)) * (180 / Math.PI);
         }
         
         private List<Vector> FormVectors(PointSquaresDto a, PointSquaresDto b, PointSquaresDto c)
@@ -85,14 +88,43 @@ namespace SquaresWebApi.Services
             {
                 return new SquareDto()
                 {
-                    A = rightAngleVectors[0].Start,
-                    B = rightAngleVectors[0].End,
-                    C = rightAngleVectors[1].End,
-                    D = foundFourthPoint
+                    Points = new List<PointSquaresDto>()
+                    {
+                        rightAngleVectors[0].Start,
+                        rightAngleVectors[0].End,
+                        rightAngleVectors[1].Start,
+                        fourthPoint
+                    }
                 };
             }
             
             return null;
+        }
+
+        private bool SquareIsUnique(SquareDto squareToCheck, List<SquareDto> savedSquares)
+        {
+            List<PointSquaresDto> dupPoints = new List<PointSquaresDto>();
+
+            foreach(SquareDto s in savedSquares)
+            {
+                foreach(PointSquaresDto p in s.Points)
+                {
+                    foreach(var pCheck in squareToCheck.Points)
+                    {
+                        if(p.X == pCheck.X && p.Y == pCheck.Y)
+                        {
+                            dupPoints.Add(p);
+                        }
+                    }
+                }
+            }
+
+            if(dupPoints.Count > 2)
+            {
+                return false;
+            }
+            
+            return true;
         }
     }
 }

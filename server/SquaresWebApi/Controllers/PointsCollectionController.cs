@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SquaresWebApi.Dtos.PointsCollectionDtos;
 using SquaresWebApi.Services;
 using System;

@@ -32,6 +32,8 @@ namespace SquaresWebApi
             var defaultConnection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(d => d.UseSqlServer(defaultConnection));
 
+            services.AddTransient<SquaresService>();
+
             services.AddTransient<PointsService>();
             services.AddTransient<PointsRepository>();
 
