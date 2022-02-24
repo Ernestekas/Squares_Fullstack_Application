@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import Collection from 'src/app/Models/Collection.model';
 import ImportedCollection from 'src/app/Models/imported-collection.model';
 import Point from 'src/app/Models/Point.model';
+import SquaresCollection from 'src/app/Models/squares-collection.model';
 import { SharedService } from 'src/app/services/shared.service';
 import { TextReaderService } from 'src/app/services/text-reader.service';
 
@@ -11,6 +12,7 @@ import { TextReaderService } from 'src/app/services/text-reader.service';
   styleUrls: ['./selected-collection.component.scss']
 })
 export class SelectedCollectionComponent implements OnInit {
+  public collectionToSquares: SquaresCollection = {};
 
   public selectedCollectionInput: Collection = {};
   public manualyAdded: Point[] = [];
@@ -37,6 +39,12 @@ export class SelectedCollectionComponent implements OnInit {
         console.log("Shared OK.");
       }
     });
+  }
+
+  getSquares(){
+    this.collectionToSquares = {
+      points: this.selectedCollectionInput.points
+    }
   }
 
   addPoint() {

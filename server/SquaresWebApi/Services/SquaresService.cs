@@ -114,14 +114,13 @@ namespace SquaresWebApi.Services
                         if(p.X == pCheck.X && p.Y == pCheck.Y)
                         {
                             dupPoints.Add(p);
+                            if (dupPoints.Count > 2)
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
-            }
-
-            if(dupPoints.Count > 2)
-            {
-                return false;
             }
             
             return true;

@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { CollectionsComponent } from './components/collections/collections.component';
 import { SelectedCollectionComponent } from './components/selected-collection/selected-collection.component';
 import { LoadedFileResultComponent } from './components/loaded-file-result/loaded-file-result.component';
+import { SquaresResultComponent } from './components/squares-result/squares-result.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CollectionsComponent,
     SelectedCollectionComponent,
-    LoadedFileResultComponent
+    LoadedFileResultComponent,
+    SquaresResultComponent
   ],
   imports: [
     BrowserModule,

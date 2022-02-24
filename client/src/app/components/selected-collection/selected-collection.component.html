@@ -1,4 +1,5 @@
 <app-loaded-file-result [importedCollection]="importedCollection"></app-loaded-file-result>
+<app-squares-result [importedCollectionForSquares]="collectionToSquares"></app-squares-result>
 
 <table class="table table-hover">
     <thead>
@@ -8,6 +9,7 @@
                     placeholder="Collection name">
             </th>
             <th colspan="1" style="text-align: right;">
+                <button class="btn btn-outline-light" (click)="getSquares()">Get Squares</button>
                 <button class="btn btn-outline-light mx-1" (click)="saveCollection()">Save</button>
                 <button class="btn btn-outline-danger" (click)="removeCollection()">Delete</button>
             </th>
