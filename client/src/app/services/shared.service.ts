@@ -29,19 +29,27 @@ export class SharedService {
   }
 
   public loadSelectedCollection(collection: Collection) {
-    this.collectionsService.getById(collection.id!).subscribe({
-      next: (coll) => {
-        this.selectedCollection = coll;
-        this.selectedCollection$.next(this.selectedCollection);
-      }
-    })
-    this.selectedCollection$.next(collection);
+    if(collection.name === undefined){
+      this.selectedCollection = collection;
+      this.selectedCollection$.next(collection);
+    }
+    else{
+      this.collectionsService.getById(collection.id!).subscribe({
+        next: (coll) => {
+          this.selectedCollection = coll;
+          this.selectedCollection$.next(this.selectedCollection);
+        }
+      })
+      this.selectedCollection$.next(collection);
+    }
+   
   }
 
   public createCollection(collection: Collection) {
     this.collectionsService.post(collection).subscribe({
       next: () => {
         this.loadAll();
+        console.log(collection)
       },
       error: (response) => {
         console.log(response.error);

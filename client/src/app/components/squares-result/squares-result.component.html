@@ -1,20 +1,35 @@
 <div class="modal fade" id="squaresModal" tabindex="-1" aria-labelledby="squaresModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header bg-dark text-white text-center">
-          <h5 class="modal-title" id="squaresModalLabel"><b>File Import Results</b></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <table class="table">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white text-center">
+        <h5 class="modal-title" id="squaresModalLabel"><b>Calculated squares</b></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
             <tr>
-
+              <th>SQ. #</th>
+              <th>Pt. A</th>
+              <th>Pt. B</th>
+              <th>Pt. C</th>
+              <th>Pt. D</th>
             </tr>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
-        </div>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sq of squares; let i = index">
+              <td>{{i + 1}}</td>
+              <td>[{{sq.points![0].x}}, {{sq.points![0].y}}]</td>
+              <td>[{{sq.points![1].x}}, {{sq.points![1].y}}]</td>
+              <td>[{{sq.points![2].x}}, {{sq.points![2].y}}]</td>
+              <td>[{{sq.points![3].x}}, {{sq.points![3].y}}]</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>

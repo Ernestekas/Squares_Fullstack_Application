@@ -88,9 +88,9 @@ export class SelectedCollectionComponent implements OnInit {
 
   saveCollection() {
     this.selectedCollectionInput.points?.push(...this.manualyAdded);
-    this.manualyAdded = [];
-
+    
     this.sharedService.createCollection(this.selectedCollectionInput);
+    this.manualyAdded = [];
   }
 
   removeCollection() {
