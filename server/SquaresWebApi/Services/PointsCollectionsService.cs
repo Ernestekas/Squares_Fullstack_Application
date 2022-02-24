@@ -58,8 +58,12 @@ namespace SquaresWebApi.Services
         public async Task CreateAsync(PointsCollectionCreateDto collectionDto)
         {
             _collectionsValidator.RunCreateValidation(collectionDto);
-            _pointsValidator.RunCreateValidation(collectionDto.Points);
 
+            if (collectionDto.Points != null)
+            {
+                _pointsValidator.RunCreateValidation(collectionDto.Points);
+            }
+            
             PointsCollection collection = _mapper.Map<PointsCollection>(collectionDto);
 
             if (await CheckNameUniqueAsync(collection))
